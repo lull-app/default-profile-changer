@@ -1,0 +1,45 @@
+{
+  "Name": "Default Profile Changer",
+  "Version": "0.1.0.0",
+  "Author": "trueferret",
+  "Actions": [
+    {
+      "Name": "changer",
+      "UUID": "com.trueferret.default-profile-changer.changer",
+      "Icon": "imgs/actions/counter/icon",
+      "Tooltip": "Displays a count, which increments by one on press.",
+      "PropertyInspectorPath": "ui/default-profile-changer.html",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/counter/key",
+          "TitleAlignment": "middle"
+        }
+      ]
+    }
+  ],
+  "Category": "Default Profile Changer",
+  "CategoryIcon": "imgs/plugin/category-icon",
+  "CodePath": "bin/plugin.js",
+  "Description": "changes the default profile at the press of a button",
+  "Icon": "imgs/plugin/marketplace",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.4"
+  },
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "12"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Nodejs": {
+    "Version": "20",
+    "Debug": "enabled"
+  },
+  "UUID": "com.trueferret.default-profile-changer"
+}

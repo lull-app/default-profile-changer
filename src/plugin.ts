@@ -1,6 +1,6 @@
 import streamDeck, { LogLevel } from "@elgato/streamdeck";
 
-import { SwitchDefaultProfile } from "./actions/dynamic-default-profile";
+import { SwitchDefaultProfile } from "./actions/default-profile-changer";
 
 // We can enable "trace" logging so that all messages between the Stream Deck, and the plugin are recorded. When storing sensitive information
 streamDeck.logger.setLevel(LogLevel.TRACE);
