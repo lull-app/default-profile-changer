@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html>
-
-<head lang="en">
+  <head lang="en">
     <title>Default Profile Changer Settings</title>
     <meta charset="utf-8" />
     <script src="https://sdpi-components.dev/releases/v3/sdpi-components.js"></script>
-</head>
+  </head>
 
-<body>
-    <!--
-        Learn more about property inspector components at https://sdpi-components.dev/docs/components
-        TODO: HAS TO BE CHANGED!!!!
-        -->
-    <sdpi-item label="Profile">
-        <sdpi-range setting="incrementBy" min="1" max="5" step="1" default="1" showlabels></sdpi-range>
+  <body>
+    <sdpi-item label="Select Profile">
+      <sdpi-select
+        id="profileSelect"
+        setting="newDefaultProfile"
+        placeholder="Choose a profile"
+      >
+        <!-- Options will be dynamically added here -->
+      </sdpi-select>
     </sdpi-item>
-</body>
 
+    <script>
+      const { streamDeckClient } = SDPIComponents;
+
+      // Function to update the dropdown
+      function updateDropdown(profiles) {
+        const selectElement = document.getElementById("profileSelect");
+
+        // Clear existing options
+        selectElement.innerHTML = '<option value="">Choose a profile</option>';
+
+        // Add new options
+        profiles.forEach((profile) => {
+          const option = document.createElement("option");
+          option.value = profile;
+          option.textContent = profile;
+          selectElement.appendChild(option);
+        });
+      }
+
+      // Fetch settings when the Property Inspector loads
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          const settings = await streamDeckClient.getSettings();
+          if (settings?.profiles) {
+            updateDropdown(settings.profiles);
+          }
+        } catch (error) {
+          console.error("Failed to get settings:", error);
+        }
+      });
+    </script>
+  </body>
 </html>
