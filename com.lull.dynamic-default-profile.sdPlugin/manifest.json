@@ -1,14 +1,14 @@
 {
-	"Name": "Dynamic Default Profile",
+	"Name": "Default Profile Changer",
 	"Version": "0.1.0.0",
 	"Author": "Jarno Fret",
 	"Actions": [
 		{
 			"Name": "Counter",
-			"UUID": "com.lull.dynamic-default-profile.increment",
+			"UUID": "com.lull.dynamic-default-profile.switch",
 			"Icon": "imgs/actions/counter/icon",
-			"Tooltip": "Displays a count, which increments by one on press.",
-			"PropertyInspectorPath": "ui/increment-counter.html",
+			"Tooltip": "Changes the default profile when clicking the button",
+			"PropertyInspectorPath": "ui/dynamic-default-profile.html",
 			"Controllers": [
 				"Keypad"
 			],
@@ -20,7 +20,7 @@
 			]
 		}
 	],
-	"Category": "Dynamic Default Profile",
+	"Category": "Default Profile Changer",
 	"CategoryIcon": "imgs/plugin/category-icon",
 	"CodePath": "bin/plugin.js",
 	"Description": "a plugin for changing the default profile when you are streaming",
