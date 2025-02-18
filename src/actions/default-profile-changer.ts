@@ -5,14 +5,14 @@ import streamDeck, {
   PropertyInspectorDidAppearEvent,
   SingletonAction,
 } from "@elgato/streamdeck";
-import { exec } from "child_process";
+const { execFile } = require('child_process');
 
 @action({ UUID: "com.lull.dynamic-default-profile.switch" })
 export class SwitchDefaultProfile extends SingletonAction<SwitchProfileSettings> {
   override async onPropertyInspectorDidAppear?(
     ev: PropertyInspectorDidAppearEvent
   ): Promise<void> {
-    exec("python ./src/actions/get-all-profiles.py", async (error, stdout) => {
+    execFile('python', ['./src/actions/get-all-profiles.py'], async (error, stdout) => {
       streamDeck.logger.info("The Script has ran");
       if (error) {
         streamDeck.logger.info("ERROR RUNNING PY SCRIPT");
