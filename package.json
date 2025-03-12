@@ -1,7 +1,11 @@
 {
     "scripts": {
-        "build": "rollup -c",
-        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.trueferret.default-profile-changer\""
+        "build": "rollup -c && rollup -c server.rollup.config.mjs",
+        "build:plugin": "rollup -c",
+        "build:server": "rollup -c server.rollup.config.mjs",
+        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.trueferret.default-profile-changer\"",
+        "start-server": "node dist/server.js",
+        "dev": "concurrently \"npm run watch\" \"npm run start-server\""
     },
     "type": "module",
     "devDependencies": {
@@ -20,6 +24,7 @@
     },
     "dependencies": {
         "@elgato/streamdeck": "^1.0.0",
-         "express": "^4.21.2"
+        "cors": "^2.8.5",
+        "express": "^4.21.2"
     }
 }

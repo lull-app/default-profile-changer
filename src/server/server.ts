@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import { ProfileManager } from './profileManager';
 // import { StreamDeckReloader } from './streamDeckReloader';
-import streamDeck from "@elgato/streamdeck";
 
 export class Server {
   private app: express.Application;
@@ -26,7 +25,7 @@ export class Server {
     
     // Log requests
     this.app.use((req, res, next) => {
-      streamDeck.logger.info(`${req.method} ${req.url}`);
+      console.log(`${req.method} ${req.url}`)
       next();
     });
   }
@@ -38,7 +37,7 @@ export class Server {
         const profiles = this.profileManager.getAllProfiles();
         res.json({ success: true, profiles });
       } catch (error) {
-        streamDeck.logger.error('Error getting profiles:', error);
+        console.log('Error getting profiles:', error)
         res.status(500).json({ success: false, error: 'Failed to get profiles' });
       }
     });
@@ -48,7 +47,7 @@ export class Server {
   
   public start() {
     this.server = this.app.listen(this.port, () => {
-      streamDeck.logger.info(`Profile manager server running on port ${this.port}`);
+      console.log(`Profile manager server running on port ${this.port}`)
     });
     
     return this.server;
@@ -57,7 +56,7 @@ export class Server {
   public stop() {
     if (this.server) {
       this.server.close();
-      streamDeck.logger.info('Server shut down');
+      console.log('Server shit down')
     }
   }
 }
