@@ -17,34 +17,57 @@
       </sdpi-select>
     </sdpi-item>
 
+    <sdpi-item label="Status" type="info">
+      <div id="statusMessage">Loading profiles...</div>
+    </sdpi-item>
+
+    <sdpi-item label="Refresh Profiles">
+      <sdpi-button id="refreshButton">Refresh Profiles</sdpi-button>
+    </sdpi-item>
+
     <script>
       const { streamDeckClient } = SDPIComponents;
 
-      // Function to update the dropdown
+      // Function to update the dropdown menu
       function updateDropdown(profiles) {
         const selectElement = document.getElementById("profileSelect");
 
-        // Clear existing options
-        selectElement.innerHTML = '<option value="">Choose a profile</option>';
+        // Clearing the existing options
+        selectElement.innerHTML = `<option value="">Choose a profile</option>`;
 
-        // Add new options
-        profiles.forEach((profile) => {
-          const option = document.createElement("option");
-          option.value = profile;
-          option.textContent = profile;
-          selectElement.appendChild(option);
-        });
+        // Adding the options
+        if (profiles && profiles.length > 0) {
+          profiles.forEach((profileName) => {
+            const option = document.createElement("option");
+            option.value = profileName;
+            option.textContent = profileName;
+            selectElement.appendChild(option);
+          });
+          statusMessage.textContent = `${profiles.length} profiles loaded`;
+        } else {
+          statusMessage.textContent = "No profiles found";
+        }
       }
 
-      // Fetch settings when the Property Inspector loads
+      // For Fetching settings when the Property Inspector loads
       document.addEventListener("DOMContentLoaded", async function () {
         try {
-          const settings = await streamDeckClient.getSettings();
-          if (settings?.profiles) {
+          const settings = await streamDeckClient.getGlobalSettings();
+
+          if (settings && settings.profiles && settings.profiles.length > 0) {
             updateDropdown(settings.profiles);
+            
+            /** in the future this will be fiksed
+            if (settings.newDefaultProfile) {
+              document.getElementById("profileSelect").value = settings.newDefaultProfile;
+            }
+            */
+          } else {
+            statusMessage.textContent = "Loading Profiles...";
           }
         } catch (error) {
-          console.error("Failed to get settings:", error);
+          statusMessage.textContent =
+            "Error loading settings: " + error.message;
         }
       });
     </script>

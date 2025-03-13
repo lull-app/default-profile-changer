@@ -49,6 +49,8 @@ export class ProfileManager {
           const data = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
           if (!data.Name) return null;
 
+          console.log(data)
+
           return {
             id: folder,
             name: String(data.Name),

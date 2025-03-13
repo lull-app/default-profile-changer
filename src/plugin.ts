@@ -6,11 +6,6 @@ import { ServerClient } from "./lib/serverClient";
 // We can enable "trace" logging so that all messages between the Stream Deck, and the plugin are recorded. When storing sensitive information
 streamDeck.logger.setLevel(LogLevel.TRACE);
 
-// Constant
-const SERVER_PORT = 37337;
-
-const serverClient = new ServerClient(SERVER_PORT);
-
 
 // Register the increment action.
 streamDeck.actions.registerAction(new SwitchDefaultProfile());

@@ -7,7 +7,7 @@
       "Name": "changer",
       "UUID": "com.trueferret.default-profile-changer.changer",
       "Icon": "imgs/actions/counter/icon",
-      "Tooltip": "Displays a count, which increments by one on press.",
+      "Tooltip": "Shows the default profile",
       "PropertyInspectorPath": "ui/default-profile-changer.html",
       "Controllers": ["Keypad"],
       "States": [

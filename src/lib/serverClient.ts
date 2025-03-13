@@ -27,6 +27,7 @@ export class ServerClient {
    */
   async getAllProfiles(): Promise<any[]> {
     try {
+      console.log("fetching profiles")
       const response = await fetch(`${this.baseUrl}/profiles`);
       
       if (!response.ok) {
