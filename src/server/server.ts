@@ -1,8 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import { ProfileManager } from './profileManager';
-// import { StreamDeckReloader } from './streamDeckReloader';
+import { resetStreamDeck } from './streamDeckReloader';
 
+/**
+ * All of the API endpoints and server setup
+ */
 export class Server {
   private app: express.Application;
   private server: any;
@@ -35,14 +38,63 @@ export class Server {
     this.app.get('/profiles', (req, res) => {
       try {
         const profiles = this.profileManager.getAllProfiles();
+        console.log(profiles)
         res.json({ success: true, profiles });
       } catch (error) {
         console.log('Error getting profiles:', error)
         res.status(500).json({ success: false, error: 'Failed to get profiles' });
       }
     });
+
+    // Get default profile
+    this.app.get('/profiles/default', (req, res) => {
+      try {
+        const defaultProfile = this.profileManager.getDefaultProfile();
+        if (defaultProfile) {
+          res.json({ success: true, profile: defaultProfile });
+        } else {
+          res.json({ success: true, profile: null });
+        }
+      } catch (error) {
+        console.log('Error getting default profile:', error);
+        res.status(500).json({ success: false, error: 'Failed to get default profile' });
+      }
+    });
     
-    // Add more routes here
+    // Set default profile
+    this.app.post('/profiles/:id/default', async (req, res) => {
+      try {
+        const profileId = req.params.id;
+        const success = this.profileManager.setDefaultProfile(profileId);
+        if (success) {
+          console.log("Setted the new Defualt profile")
+          await resetStreamDeck();
+          res.json({ success: true });
+        } else {
+          res.status(404).json({ success: false, error: 'Profile not found or could not be set as default' });
+        }
+      } catch (error) {
+        console.log('Error setting default profile:', error);
+        res.status(500).json({ success: false, error: 'Failed to set default profile' });
+      }
+    });
+   
+    /**
+     * Reset Stream Deck (restart and clear cache)
+     */
+    this.app.post('/streamdeck/reset', async (req, res) => {
+      try {
+        const success = await resetStreamDeck();
+        if (success) {
+          res.json({ success: true, message: 'Stream Deck has been reset' });
+        } else {
+          res.status(500).json({ success: false, error: 'Failed to reset Stream Deck' });
+        }
+      } catch (error) {
+        console.log('Error resetting Stream Deck:', error);
+        res.status(500).json({ success: false, error: 'Failed to reset Stream Deck' });
+      }
+    });
   }
   
   public start() {

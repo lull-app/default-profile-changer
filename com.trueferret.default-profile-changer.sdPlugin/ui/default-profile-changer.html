@@ -27,20 +27,27 @@
 
     <script>
       const { streamDeckClient } = SDPIComponents;
+      const statusMessage = document.getElementById("statusMessage");
 
       // Function to update the dropdown menu
       function updateDropdown(profiles) {
         const selectElement = document.getElementById("profileSelect");
 
-        // Clearing the existing options
-        selectElement.innerHTML = `<option value="">Choose a profile</option>`;
+        // Clear existing options
+        selectElement.innerHTML = '';
 
         // Adding the options
         if (profiles && profiles.length > 0) {
-          profiles.forEach((profileName) => {
+          profiles.forEach((profile, index) => {
             const option = document.createElement("option");
-            option.value = profileName;
-            option.textContent = profileName;
+            option.value = profile.id;
+            option.textContent = profile.name;
+
+            // Mark default profile with an asterisk
+            if (profile.isDefault == true) {
+              option.textContent += " *";
+            }
+
             selectElement.appendChild(option);
           });
           statusMessage.textContent = `${profiles.length} profiles loaded`;
@@ -49,25 +56,51 @@
         }
       }
 
+      // Function to refresh profiles
+      async function refreshProfiles() {
+        statusMessage.textContent = "Refreshing profiles...";
+        try {
+          await streamDeckClient.send({ action: "refreshProfiles" });
+          setTimeout(async () => {
+            const settings = await streamDeckClient.getGlobalSettings();
+            if (settings && settings.profiles) {
+              updateDropdown(settings.profiles, settings.profilesData);
+            } else {
+              statusMessage.textContent = "No profiles found after refresh";
+            }
+          }, 1000); // Give the plugin time to fetch and save profiles
+        } catch (error) {
+          statusMessage.textContent = "Error refreshing profiles: " + error.message;
+        }
+      }
+
+      document.getElementById("refreshButton").addEventListener("click", refreshProfiles);
+
       // For Fetching settings when the Property Inspector loads
       document.addEventListener("DOMContentLoaded", async function () {
         try {
           const settings = await streamDeckClient.getGlobalSettings();
+          const instanceSettings = await streamDeckClient.getSettings();
 
           if (settings && settings.profiles && settings.profiles.length > 0) {
             updateDropdown(settings.profiles);
             
-            /** in the future this will be fiksed
-            if (settings.newDefaultProfile) {
-              document.getElementById("profileSelect").value = settings.newDefaultProfile;
+            // Set the selected profile if it's in the instance settings
+            if (instanceSettings && instanceSettings.newDefaultProfile) {
+              document.getElementById("profileSelect").value = instanceSettings.newDefaultProfile;
             }
-            */
+            
+            // Display current default profile
+            const defaultProfile = settings.profilesData?.find(p => p.isDefault == true);
+            if (defaultProfile) {
+              statusMessage.textContent += `. Current default: ${defaultProfile.name}`;
+            }
           } else {
-            statusMessage.textContent = "Loading Profiles...";
+            statusMessage.textContent = "Loading profiles...";
+            refreshProfiles();
           }
         } catch (error) {
-          statusMessage.textContent =
-            "Error loading settings: " + error.message;
+          statusMessage.textContent = "Error loading settings: " + error.message;
         }
       });
     </script>

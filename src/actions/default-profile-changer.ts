@@ -1,22 +1,33 @@
 import streamDeck, {
   action,
   DidReceiveSettingsEvent,
+  JsonObject,
   KeyDownEvent,
   PropertyInspectorDidAppearEvent,
   SingletonAction,
 } from "@elgato/streamdeck";
 import { ServerClient } from "../lib/serverClient";
 
-@action({ UUID: "com.trueferret.default-profile-changer.changer" })
+interface Profile {
+  id: string;
+  name: string;
+  isdefault: boolean;
+}
+
+function isProfileArray(data: unknown): data is Profile[] {
+  return Array.isArray(data) && data.every(
+    (item) => typeof item === "object" && item !== null && "Name" in item
+  );
+}
+
+@action({ UUID: "com.trueferret.default-profile-changer.button" })
 export class SwitchDefaultProfile extends SingletonAction<SwitchProfileSettings> {
   private serverClient: ServerClient;
-
 
   constructor() {
     super();
     this.serverClient = new ServerClient();
   }
-
 
   override async onPropertyInspectorDidAppear(ev: PropertyInspectorDidAppearEvent): Promise<void> {
     try {
@@ -29,17 +40,13 @@ export class SwitchDefaultProfile extends SingletonAction<SwitchProfileSettings>
       }
 
       const profiles = await this.serverClient.getAllProfiles();
-      const profileNames = profiles.map(profile => profile.name || profile.id);
 
-      await streamDeck.logger.info(`${profileNames}`);
+      await streamDeck.settings.setGlobalSettings({
+        profiles: profiles
+      });
       
-      await streamDeck.settings.setGlobalSettings({ profiles: profileNames });
 
-      const settings = await streamDeck.settings.getGlobalSettings();
-      streamDeck.logger.info(settings)
-      
-      await streamDeck.logger.info(`Loaded ${profileNames.length} profiles`);
-
+      await streamDeck.logger.info(`Loaded ${profiles.length} profiles`);
     } catch (error: any) {
       console.error("Error in onPropertyInspectorDidAppear:", error);
       await streamDeck.logger.error(`Error loading profiles: ${error.message}`);
@@ -49,7 +56,38 @@ export class SwitchDefaultProfile extends SingletonAction<SwitchProfileSettings>
   override async onKeyDown(
     ev: KeyDownEvent<SwitchProfileSettings>
   ): Promise<void> {
-    // TODO Call tServer via the serverClient.ts to switch the default profile
+    try {
+      // Get the selected profile from settings
+      const settings = ev.payload.settings;
+      
+      if (!settings.newDefaultProfile) {
+        await streamDeck.logger.error("No profile selected in settings.");
+        return;
+      }
+
+      // Find the profile ID that matches the selected profile name
+      const profiles = await this.serverClient.getAllProfiles();
+      const selectedProfile = profiles.find(p => p.id === settings.newDefaultProfile);
+      
+      if (!selectedProfile) {
+        await streamDeck.logger.error(`Profile ${profiles} not found.`);
+        await streamDeck.logger.error(`Profile ${settings.newDefaultProfile} not found.`);
+        await streamDeck.logger.error(`Profile ${selectedProfile} not found.`);
+        return;
+      }
+
+      // Set the new default profile using the ID
+      const success = await this.serverClient.setDefaultProfile(selectedProfile.id);
+      
+      if (success) {
+        await streamDeck.logger.info(`Successfully changed default profile to ${settings.newDefaultProfile}`);
+      } else {
+        await streamDeck.logger.error("Failed to change default profile.");
+      }
+    } catch (error: any) {
+      console.error("Error changing default profile:", error);
+      await streamDeck.logger.error(`Error changing default profile: ${error.message}`);
+    }
   }
 
   override onDidReceiveSettings(

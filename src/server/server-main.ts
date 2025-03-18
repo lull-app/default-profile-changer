@@ -1,6 +1,8 @@
 import { Server } from './server';
 
-// Create and start the server
+/**
+ * Creating and starting the server
+ */
 const server = new Server(37337);
 server.start();
 

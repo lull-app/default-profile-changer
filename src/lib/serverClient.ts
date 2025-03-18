@@ -11,7 +11,7 @@ export class ServerClient {
    */
   async isServerRunning(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/profiles`, { 
+      const response = await fetch(`${this.baseUrl}/profiles`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -21,24 +21,43 @@ export class ServerClient {
       return false;
     }
   }
-  
+ 
   /**
    * Get all profiles from the server
    */
   async getAllProfiles(): Promise<any[]> {
     try {
-      console.log("fetching profiles")
+      console.log("Fetching profiles");
       const response = await fetch(`${this.baseUrl}/profiles`);
-      
+     
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
       }
-      
+     
       const data: any = await response.json();
       return data.profiles || [];
     } catch (error) {
       console.error('Error getting profiles from server:', error);
       return [];
+    }
+  }
+
+  /**
+   * Get the default profile
+   */
+  async getDefaultProfile(): Promise<any | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/profiles/default`);
+     
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+     
+      const data: any = await response.json();
+      return data.profile || null;
+    } catch (error) {
+      console.error('Error getting default profile:', error);
+      return null;
     }
   }
   
@@ -47,7 +66,7 @@ export class ServerClient {
    */
   async setDefaultProfile(profileId: string): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/profiles/default`, {
+      const response = await fetch(`${this.baseUrl}/profiles/${profileId}/default`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ profileId })
@@ -64,27 +83,28 @@ export class ServerClient {
       return false;
     }
   }
-  
-  /**
-   * Reload the Stream Deck application
-   */
-  async reloadStreamDeck(): Promise<boolean> {
+
+ /**
+   * Reset the Stream Deck application (restart and clear cache)
+   *
+  async resetStreamDeck(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/streamdeck/reload`, {
+      const response = await fetch(`${this.baseUrl}/streamdeck/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      
+     
       if (!response.ok) {
         throw new Error(`HTTP error ${response.status}`);
       }
-      
+     
       const data: any = await response.json();
       return data.success || false;
     } catch (error) {
-      console.error('Error reloading Stream Deck:', error);
+      console.error('Error resetting Stream Deck:', error);
       return false;
     }
   }
+  */
 }
 
