@@ -14,13 +14,7 @@ interface Profile {
   isdefault: boolean;
 }
 
-function isProfileArray(data: unknown): data is Profile[] {
-  return Array.isArray(data) && data.every(
-    (item) => typeof item === "object" && item !== null && "Name" in item
-  );
-}
-
-@action({ UUID: "com.trueferret.default-profile-changer.button" })
+@action({ UUID: "com.lull.default-profile-changer.button" })
 export class SwitchDefaultProfile extends SingletonAction<SwitchProfileSettings> {
   private serverClient: ServerClient;
 

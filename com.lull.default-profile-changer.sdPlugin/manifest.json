@@ -5,7 +5,7 @@
   "Actions": [
     {
       "Name": "changer",
-      "UUID": "com.trueferret.default-profile-changer.button",
+      "UUID": "com.lull.default-profile-changer.button",
       "Icon": "imgs/actions/counter/icon",
       "Tooltip": "Shows the default profile",
       "PropertyInspectorPath": "ui/default-profile-changer.html",

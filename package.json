@@ -3,7 +3,7 @@
         "build": "rollup -c && rollup -c server.rollup.config.mjs",
         "build:plugin": "rollup -c",
         "build:server": "rollup -c server.rollup.config.mjs",
-        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.trueferret.default-profile-changer\"",
+        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.lull.default-profile-changer\"",
         "watch:server": "rollup -c server.rollup.config.mjs -w",
         "start-server": "nodemon --config nodemon.json",
         "dev": "concurrently \"npm run watch\" \"npm run watch:server\" \"npm run start-server\""
