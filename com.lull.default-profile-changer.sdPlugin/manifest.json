@@ -1,45 +1,47 @@
 {
-  "Name": "Default Profile Changer",
-  "Version": "0.1.0.0",
-  "Author": "trueferret",
-  "Actions": [
-    {
-      "Name": "changer",
-      "UUID": "com.lull.default-profile-changer.button",
-      "Icon": "imgs/actions/counter/icon",
-      "Tooltip": "Shows the default profile",
-      "PropertyInspectorPath": "ui/default-profile-changer.html",
-      "Controllers": ["Keypad"],
-      "States": [
-        {
-          "Image": "imgs/actions/counter/key",
-          "TitleAlignment": "middle"
-        }
-      ]
-    }
-  ],
-  "Category": "Default Profile Changer",
-  "CategoryIcon": "imgs/plugin/category-icon",
-  "CodePath": "bin/plugin.js",
-  "Description": "changes the default profile at the press of a button",
-  "Icon": "imgs/plugin/marketplace",
-  "SDKVersion": 2,
-  "Software": {
-    "MinimumVersion": "6.4"
-  },
-  "OS": [
-    {
-      "Platform": "mac",
-      "MinimumVersion": "12"
-    },
-    {
-      "Platform": "windows",
-      "MinimumVersion": "10"
-    }
-  ],
-  "Nodejs": {
-    "Version": "20",
-    "Debug": "enabled"
-  },
-  "UUID": "com.trueferret.default-profile-changer"
+	"Name": "Default Profile Changer",
+	"Version": "0.1.0.0",
+	"Author": "trueferret",
+	"Actions": [
+		{
+			"Name": "changer",
+			"UUID": "com.lull.default-profile-changer.button",
+			"Icon": "imgs/actions/button/icon",
+			"Tooltip": "Shows the default profile",
+			"PropertyInspectorPath": "ui/default-profile-changer.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/button/button",
+					"TitleAlignment": "middle"
+				}
+			]
+		}
+	],
+	"Category": "Default Profile Changer",
+	"CategoryIcon": "imgs/plugin/logo",
+	"CodePath": "bin/plugin.js",
+	"Description": "changes the default profile at the press of a button",
+	"Icon": "imgs/plugin/lull-logo",
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion": "6.4"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "20",
+		"Debug": "enabled"
+	},
+	"UUID": "com.lull.default-profile-changer"
 }
