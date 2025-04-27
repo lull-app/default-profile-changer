@@ -27,14 +27,6 @@ Fast, simple!
 - Click the button to switch your default profile.
 
 
-## 🛠️ Tech Stack
-
-- **TypeScript:** Full codebase written in TypeScript
-- **Stream Deck SDK:** Built using [Elgato's official SDK](https://docs.elgato.com/streamdeck/sdk/introduction/getting-started)
-- **Express.js Server:** Lightweight local server to safely edit profile files
-- **Rollup & Nodemon:** Easy development with live-reloading
-
-
 ## 📦 Development Setup
 
 1. Clone the repository:
@@ -53,9 +45,3 @@ Fast, simple!
 This will:
 - Watch and rebuild the plugin and server automatically.
 - Restart the Stream Deck plugin for easy testing.
-
-
-## 📜 License
-
-MIT License — free for personal and commercial use.
-
