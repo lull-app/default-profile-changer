@@ -84,10 +84,39 @@ export class SwitchDefaultProfile extends SingletonAction<SwitchProfileSettings>
     }
   }
 
-  override onDidReceiveSettings(
+  override async onDidReceiveSettings(
     ev: DidReceiveSettingsEvent<SwitchProfileSettings>
-  ): void {
-    // Handle the settings changing in the property inspector (UI).
+  ): Promise<void> {
+    const settings = ev.payload.settings;
+
+    if (settings && settings.newDefaultProfile) {
+      const globalSettings = await streamDeck.settings.getGlobalSettings();
+      const profiles = globalSettings.profiles as unknown as Profile[];
+
+      if (profiles && profiles.length > 0) {
+        const selectedProfile = profiles.find(p => p.id === settings.newDefaultProfile);
+
+        if (selectedProfile) {
+          const formattedTitle = selectedProfile.name.replace(/ /g, "\n");
+          await streamDeck.actions.forEach((action) => {
+            action.setTitle(formattedTitle);
+          });
+        } else {
+
+          await streamDeck.actions.forEach((action) => {
+            action.setTitle("Select\nProfile");
+          });
+        }
+      } else {
+        await streamDeck.actions.forEach((action) => {
+          action.setTitle("Select\nProfile");
+        });
+      }
+    } else {
+      await streamDeck.actions.forEach((action) => {
+        action.setTitle("Select\nProfile");
+      });
+    }
   }
 }
 

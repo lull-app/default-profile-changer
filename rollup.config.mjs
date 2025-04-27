@@ -6,7 +6,7 @@ import path from "node:path";
 import url from "node:url";
 
 const isWatching = !!process.env.ROLLUP_WATCH;
-const sdPlugin = "com.trueferret.default-profile-changer.sdPlugin";
+const sdPlugin = "com.lull.default-profile-changer.sdPlugin";
 
 /**
  * @type {import('rollup').RollupOptions}
